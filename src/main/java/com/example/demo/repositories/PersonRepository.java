@@ -6,6 +6,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.Collection;
 
 public interface PersonRepository  extends PagingAndSortingRepository<Person, String> {
-    Person findFirst();
+    Person findFirstByVorname(String name);
     Collection<Person> findAll();
 }
