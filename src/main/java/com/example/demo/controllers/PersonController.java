@@ -10,13 +10,11 @@ import java.util.Collection;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping(path = "/person")
+@RequestMapping(path = "/api/person")
 public class PersonController {
 
     @Autowired
     PersonRepository personRepository;
-
-    final String FIRST_PERSON_VORNAME = "Max";
 
     @RequestMapping(path = "/register", method = RequestMethod.POST)
     public ResponseEntity<Person> registerPerson(@RequestBody Person person){
@@ -32,7 +30,13 @@ public class PersonController {
 
     @RequestMapping(path = "/first", method = RequestMethod.GET)
     public ResponseEntity<Person> getFirstPerson() {
-        Person person = personRepository.findFirstByVorname(FIRST_PERSON_VORNAME);
-        return ResponseEntity.ok(person);
+        Collection<Person> persons = personRepository.findAll();
+        return ResponseEntity.ok(!persons.isEmpty() ? persons.iterator().next(): new Person());
+    }
+
+    @RequestMapping(path = "/delete", method = RequestMethod.POST)
+    public ResponseEntity<Collection<Person>> deletePerson(@RequestBody String id) {
+        personRepository.deleteById(id);
+        return ResponseEntity.ok(personRepository.findAll());
     }
 }
